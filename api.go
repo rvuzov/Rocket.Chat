@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func apiPost(method apiMethod, request interface{}, response interface{}) (err error) {
+func apiPost(method apiMethod, request interface{}, response apiResponseInterface) (err error) {
 	defer makeError(&err, "apiPost", "method", method, "request", request, "response", response)
 
 	requestJson, err := json.Marshal(request)
@@ -42,6 +42,10 @@ func apiPost(method apiMethod, request interface{}, response interface{}) (err e
 	}
 
 	log.Info(string(responseBody))
-	err = json.Unmarshal(responseBody, response)
+	if err = json.Unmarshal(responseBody, response); err != nil {
+		return
+	}
+
+	err = response.GetError()
 	return
 }
