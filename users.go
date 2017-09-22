@@ -4,6 +4,21 @@ var Users users
 
 type users struct{}
 
+type (
+	apiCreateUserRequest struct {
+		Email               string `json:"email"`
+		Password            string `json:"password"`
+		Name                string `json:"name"`
+		UserName            string `json:"username"`
+		JoinDefaultChannels bool   `json:"joinDefaultChannels"`
+	}
+
+	apiCreateUserResponse struct {
+		apiResponse
+		User apiUser `json:"user"`
+	}
+)
+
 func (users) Create(email, password, name, username string) (userId string, err error) {
 	defer makeError(&err, "Create", "email", email, "password", password, "name", name, "username", username)
 
@@ -24,6 +39,22 @@ func (users) Create(email, password, name, username string) (userId string, err 
 	return
 }
 
+type (
+	apiCreateUserTokenRequest struct {
+		UserId string `json:"userId"`
+	}
+
+	apiCreateUserTokenResponseData struct {
+		UserId    string `json:"userId"`
+		AuthToken string `json:"authToken"`
+	}
+
+	apiCreateUserTokenResponse struct {
+		apiResponse
+		Data apiCreateUserTokenResponseData `json:"data"`
+	}
+)
+
 func (users) CreateToken(userId string) (token string, err error) {
 	defer makeError(&err, "CreateToken", "userId", userId)
 
@@ -37,6 +68,17 @@ func (users) CreateToken(userId string) (token string, err error) {
 	return
 }
 
+type (
+	apiSetUserAvatarRequest struct {
+		UserId    string `json:"userId"`
+		AvatarUrl string `json:"avatarUrl"`
+	}
+
+	apiSetUserAvatarResponse struct {
+		apiResponse
+	}
+)
+
 func (users) SetAvatar(userId string, avatarUrl string) (err error) {
 	defer makeError(&err, "SetAvatar", "userId", userId, "avatarUrl", avatarUrl)
 
@@ -45,6 +87,22 @@ func (users) SetAvatar(userId string, avatarUrl string) (err error) {
 	err = apiPost(kapiUsersSetAvatar, request, &response)
 	return
 }
+
+type (
+	apiUpdateUserRequest struct {
+		UserId string                   `json:"userId"`
+		Data   apiUpdateUserRequestData `json:"data"`
+	}
+
+	apiUpdateUserRequestData struct {
+		Name string `json:"name"`
+	}
+
+	apiUpdateUserResponse struct {
+		apiResponse
+		User apiUser `json:"user"`
+	}
+)
 
 func (users) Update(userId string, name string) (err error) {
 	defer makeError(&err, "Update", "userId", userId, "name", name)
