@@ -41,7 +41,6 @@ func apiPost(method apiMethod, request interface{}, response apiResponseInterfac
 		return
 	}
 
-	log.Info(string(responseBody))
 	if err = json.Unmarshal(responseBody, response); err != nil {
 		return
 	}
