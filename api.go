@@ -3,7 +3,7 @@ package rocketchat
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/AlexeySpiridonov/goapp-config"
+	"github.com/rvuzov/goapp-config"
 	"io/ioutil"
 	"net/http"
 )
