@@ -94,6 +94,11 @@ type (
 		Data   apiUpdateUserRequestData `json:"data"`
 	}
 
+	apiLoginRequest struct {
+		User       string `json:"user"`
+		Password   string `json:"password"`
+	}
+
 	apiUpdateUserRequestData struct {
 		Name string `json:"name"`
 	}
@@ -101,6 +106,11 @@ type (
 	apiUpdateUserResponse struct {
 		apiResponse
 		User apiUser `json:"user"`
+	}
+
+	apiLoginResponse struct {
+		apiResponse
+		Data authData `json:"data"`
 	}
 )
 
@@ -113,5 +123,21 @@ func (users) Update(userId string, name string) (err error) {
 	}
 	var response apiUpdateUserResponse
 	err = apiPost(kapiUsersUpdate, request, &response)
+	return
+}
+func (users) Login(userEmail string, userPassword string) (authToken string,userId string,err error) {
+	defer makeError(&err, "Login", "userEmail", userEmail, "userPassword", userPassword)
+
+	request := apiLoginRequest{
+		User: userEmail,
+		Password:userPassword,
+	}
+	var response apiLoginResponse
+	if err = apiPost(kapiUsersLogin, request, &response); err != nil {
+		return
+	}
+
+	authToken = response.Data.AuthToken
+	userId = response.Data.UserId
 	return
 }

@@ -40,6 +40,7 @@ func apiPost(method apiMethod, request interface{}, response apiResponseInterfac
 	if err != nil {
 		return
 	}
+	//log.Debug(string(responseBody))
 
 	if err = json.Unmarshal(responseBody, response); err != nil {
 		return

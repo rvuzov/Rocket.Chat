@@ -7,12 +7,16 @@ type apiResponseInterface interface {
 }
 
 type apiResponse struct {
+	Status    string `json:"status"`
 	Success   bool   `json:"success"`
 	Error     string `json:"error"`
 	ErrorType string `json:"errorType"`
 }
 
 func (response apiResponse) GetError() error {
+	if (response.Status == "success") {
+		return nil
+	}
 	if response.Success {
 		return nil
 	}
@@ -21,4 +25,8 @@ func (response apiResponse) GetError() error {
 
 type apiUser struct {
 	Id string `json:"_id"`
+}
+type authData struct {
+	AuthToken string `json:"authToken"`
+	UserId string `json:"userId"`
 }
